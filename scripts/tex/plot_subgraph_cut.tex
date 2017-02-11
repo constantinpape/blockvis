@@ -1,0 +1,44 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+%\usepackage[active,tightpage]{preview}
+
+\newcommand{\impath}{../../data/raw_sp.png}
+\newcommand{\boundingbox}[4]{bb#1to#2-#3to#4.tex}
+\newcommand{\genpath}{../../data/generated_tex_2_spraw/}
+
+\begin{document}
+
+\tikzstyle{img_style}  = [inner sep=0pt,  draw,  thick]
+\tikzstyle{oseg_style} = [img_style, black,thin]
+\tikzstyle{in_node}   = [fill=white,draw=black,circle,inner sep=0pt,minimum size=3pt,very thin,scale=1.2]
+\tikzstyle{out_node}   = [fill=white,draw=black,circle,inner sep=0pt,minimum size=3pt,very thin,scale=.8]
+\tikzstyle{edge_in}  = [draw=blue,very thick]
+\tikzstyle{edge_in_cut}  = [draw=blue,very thick,dashed]
+\tikzstyle{edge_out} = [draw=green,very thick]
+\tikzstyle{edge_remaining} = [draw=black,very thin, opacity = .7]
+
+\begin{tikzpicture}[scale=1]
+
+% used to estimate figure height and width
+% programmatically
+\newlength\iwidth
+\newlength\iheight
+
+\begin{scope}[]
+    \settoheight\iheight{\includegraphics{\impath}}
+    \settowidth\iwidth{\includegraphics{\impath}}
+    \node[oseg_style]{\includegraphics{\impath}};
+    \begin{scope}[x=\iheight, y=\iwidth, xshift=-\iwidth/2.0, yshift=-\iheight/2.0]
+        \input{ \genpath subvol_\boundingbox{0}{384}{0}{768} }
+    \end{scope}
+    \begin{scope}[x=\iheight, y=\iwidth, xshift=-\iwidth/2.0, yshift=-\iheight/2.0]
+        \input{ \genpath nodes_sub_\boundingbox{0}{384}{0}{768} }
+    \end{scope}
+    \begin{scope}[x=\iheight, y=\iwidth, xshift=-\iwidth/2.0, yshift=-\iheight/2.0]
+        \input{ \genpath edges_sub_\boundingbox{0}{384}{0}{768} }
+    \end{scope}
+\end{scope}
+
+\end{tikzpicture}
+\end{document}
